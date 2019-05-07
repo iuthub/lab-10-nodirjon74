@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Like;
 use App\Post;
 use App\Tag;
+use Auth;
+use Gate;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -58,7 +60,7 @@ class PostController extends Controller
             'title' => $request->input('title'),
             'content' => $request->input('content')
         ]);
-        $post->save();
+        Auth::user()->posts()->save($post);
         $post->tags()->attach($request->input('tags') === null ? [] : $request->input('tags'));
 
         return redirect()->route('admin.index')->with('info', 'Post created, Title is: ' . $request->input('title'));
